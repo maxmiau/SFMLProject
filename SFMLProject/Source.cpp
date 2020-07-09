@@ -12,11 +12,7 @@ sf::Sprite skySprite;
 sf::Texture bgTexture;
 sf::Sprite bgSprite;
 
-sf::Texture heroTexture;
-sf::Sprite heroSprite;
 
-sf::Vector2f playerPosition;
-bool playerMoving = false;
 
 
 // Inicializar sprites
@@ -29,10 +25,7 @@ void init()
 	bgTexture.loadFromFile("Assets/graphics/bg.png");
 	bgSprite.setTexture(bgTexture);
 
-	heroTexture.loadFromFile("Assets/graphics/hero.png");
-	heroSprite.setTexture(heroTexture);
-	heroSprite.setPosition(sf::Vector2f(viewSize.x / 2, viewSize.y / 2));
-	heroSprite.setOrigin(heroTexture.getSize().x / 2, heroTexture.getSize().x / 2);
+	
 }
 
 // Funciones del teclado
@@ -41,17 +34,7 @@ void updateInput()
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
-		if (event.type == sf::Event::KeyPressed)
-		{
-			if (event.key.code == sf::Keyboard::Right)
-				playerMoving = true;
-		}
-
-		if (event.type == sf::Event::KeyReleased)
-		{
-			if (event.key.code == sf::Keyboard::Right)
-				playerMoving = false;
-		}
+		
 
 		if (event.key.code == sf::Keyboard::Escape || event.type == sf::Event::Closed)
 			window.close();
@@ -63,14 +46,13 @@ void draw()
 {
 	window.draw(skySprite);
 	window.draw(bgSprite);
-	window.draw(heroSprite);
+	
 }
 
 // Funcion para mover los objetos en pantalla
 void update(float dt)
 {
-	if (playerMoving)
-		heroSprite.move(50.0f * dt, 0);
+	
 }
 
 int main()
