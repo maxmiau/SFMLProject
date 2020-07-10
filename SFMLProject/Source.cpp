@@ -1,4 +1,5 @@
 #include "SFML-2.5.1/include/SFML/Graphics.hpp"
+#include "Hero.h"
 
 // Manejo de ventana
 sf::Vector2f viewSize(1024, 768);
@@ -11,6 +12,9 @@ sf::Sprite skySprite;
 
 sf::Texture bgTexture;
 sf::Sprite bgSprite;
+
+// Instancia del heroe
+Hero hero;
 
 
 
@@ -25,7 +29,8 @@ void init()
 	bgTexture.loadFromFile("Assets/graphics/bg.png");
 	bgSprite.setTexture(bgTexture);
 
-	
+	hero.init("Assets/graphics/hero.png", sf::Vector2f(viewSize.x * 0.25f,
+		viewSize.y * 0.5f), 200);
 }
 
 // Funciones del teclado
@@ -34,7 +39,11 @@ void updateInput()
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
-		
+		if (event.type == sf::Event::KeyPressed)
+		{
+			if (event.key.code == sf::Keyboard::W)
+				hero.jump(750.0f);
+		}
 
 		if (event.key.code == sf::Keyboard::Escape || event.type == sf::Event::Closed)
 			window.close();
@@ -46,13 +55,14 @@ void draw()
 {
 	window.draw(skySprite);
 	window.draw(bgSprite);
+	window.draw(hero.getSprite());
 	
 }
 
 // Funcion para mover los objetos en pantalla
 void update(float dt)
 {
-	
+	hero.update(dt);
 }
 
 int main()
