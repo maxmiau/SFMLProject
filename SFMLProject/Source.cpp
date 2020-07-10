@@ -3,6 +3,7 @@
 
 #include "Hero.h"
 #include "Enemy.h"
+#include "Rocket.h"
 
 // Manejo de ventana
 sf::Vector2f viewSize(1024, 768);
@@ -11,6 +12,9 @@ sf::RenderWindow window(vm, "Test", sf::Style::Default);
 
 // Crear enemigos
 void spawnEnemy();
+
+// Crear disparos
+void shoot();
 
 // Manejo de los sprites
 sf::Texture skyTexture;
@@ -24,6 +28,7 @@ Hero hero;
 
 // Vector donde se almacenan los enemigos en pantalla
 std::vector<Enemy*> enemies;
+std::vector<Rocket *> rockets;
 
 // Frecuencia de generacion de los enemigos
 float currentTime;
@@ -57,6 +62,9 @@ void updateInput()
 		{
 			if (event.key.code == sf::Keyboard::W)
 				hero.jump(750.0f);
+
+			if (event.key.code == sf::Keyboard::H)
+				shoot();
 		}
 
 		if (event.key.code == sf::Keyboard::Escape || event.type == sf::Event::Closed)
@@ -74,6 +82,10 @@ void draw()
 	for (Enemy *enemy : enemies)
 	{
 		window.draw(enemy->getSprite());
+	}
+
+	for (Rocket *rocket : rockets) {
+		window.draw(rocket->getSprite());
 	}
 	
 }
@@ -101,6 +113,18 @@ void update(float dt)
 		{
 			enemies.erase(enemies.begin() + i);
 			delete(enemy);
+		}
+	}
+
+	// Crear cohetes
+	for (int i = 0; i < rockets.size(); i++) {
+		Rocket* rocket = rockets[i];
+
+		rocket->update(dt);
+
+		if (rocket->getSprite().getPosition().x > viewSize.x) {
+			rockets.erase(rockets.begin() + i);
+			delete(rocket);
 		}
 	}
 }
@@ -161,4 +185,15 @@ void spawnEnemy() {
 	enemy->init("Assets/graphics/enemy.png", enemyPos, speed);
 
 	enemies.push_back(enemy);
+}
+
+void shoot()
+{
+	Rocket* rocket = new Rocket();
+
+	rocket->init("Assets/graphics/rocket.png",
+		hero.getSprite().getPosition(),
+		400.0f);
+
+	rockets.push_back(rocket);
 }
